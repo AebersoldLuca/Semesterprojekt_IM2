@@ -1,7 +1,6 @@
-console.log("blub");
-
+// Daten holen
 async function loadData() {
-    const url = 'https://api.com'; // mit korrekter API-URL ersetzen
+    const url = 'api_cors_bridge.php'; // mit korrekter API-URL ersetzen
     try {
         const response = await fetch(url);
         return await response.json();
@@ -12,3 +11,4 @@ async function loadData() {
 }
 const data = await loadData();
 console.log(data); // gibt die Daten der API oder false in der Konsole aus
+
