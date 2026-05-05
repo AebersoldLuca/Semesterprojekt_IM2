@@ -31,7 +31,7 @@ body {
     height: 30px;
 }
 
-.film-container {
+#results {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

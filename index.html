@@ -3,118 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cocktail API</title>
+    <title>Choose your film</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <h1>Choose your film</h1>
     </header>
+
     <main>
         <div class="filter-container">
             <div class="brand-filter">
-                <select class="filter-input">
+                <select id="brandFilter" class="filter-input">
                     <option value="">Brand</option>
-                    <option value="catlabs">CatLABS</option>
-                    <option value="arista">Arista</option>
-                    <option value="agfaphoto">AgfaPhoto</option>
-                    <option value="foma">Foma</option>
-                    <option value="ilford">Ilford</option>
-                    <option value="kodak">Kodak</option>
-                    <option value="kono">KONO!</option>
-                    <option value="psychedelic blues">Psychedelic Blues</option>
-                    <option value="revolog">Revolog</option>
-                    <option value="rollei">Rollei</option>
-                    <option value="yodica">Yodica</option>
-                    <option value="dubblefilm">dubblefilm</option>
-                    <option value="cinestill film">CineStill Film</option>
-                    <option value="film photography project">Film Photography Project</option>
-                    <option value="lomography">Lomography</option>
-                    <option value="shanghai film">Shanghai Film</option>
-                    <option value="fujifilm">Fujifilm</option>
-                    <option value="kentmere">Kentmere</option>
-                    <option value="japan camera hunter">Japan Camera Hunter</option>
-                    <option value="kosmo foto">Kosmo Foto</option>
-                    <option value="street candy film">Street Candy Film</option>
                 </select>
             </div>
+
             <div class="color-filter">
-                <select class="filter-input">
+                <select id="colorFilter" class="filter-input">
                     <option value="">Color</option>
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </select>
             </div>
+
             <div class="search-button">
-                <button id="search">Search</button>
+                <button id="searchButton">Search</button>
             </div>
         </div>
-        <div class="film-container">
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-            <div class="films">
-                <img src="" alt="Bild kommt hier">
-                <p>Beschreibung des Bildes</p>
-            </div>
-        </div>
-        <div class="cmaera-container">
-            <img src="img/camera.png" alt="Kamerabild">
+
+        <section id="results"></section>
+
+        <div class="camera-stage">
+            <img src="img/camera.png" class="camera" alt="Kamera">
+            <div id="flash" class="flash"></div>
+            <div id="filmRoll" class="film-roll"></div>
         </div>
     </main>
+
     <footer>
         <p>This is the footer of the page.</p>
-
     </footer>
+
     <script src="js/script.js" type="module"></script>
 </body>
 </html>
