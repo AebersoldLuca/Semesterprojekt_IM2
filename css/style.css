@@ -9,36 +9,38 @@ body {
     background-color: pink;
 }
 
-#content {
+
+.filter-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.brand-filter, .color-filter, #search {
+    margin: 0 20px
+}
+
+.filter-input {
+    width: 200px;
+    height: 30px;
+}
+
+#search {
+    width: 200px;
+    height: 30px;
+}
+
+.film-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-#content > div {
-    width: 150px;
-    background-color: green;
-    margin: 10px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.films {
+    width: 200px;
+    height: auto;
+    padding: 20px;
+    margin: 20px;
+    background-color: aquamarine;
 }
-
-h2 {
-    text-align: center;
-    margin: 5px;
-}
-
-p {
-    text-align: center;
-    margin: 5px;
-}
-
-img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-}
-
