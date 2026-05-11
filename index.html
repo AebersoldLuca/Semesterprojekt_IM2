@@ -2,8 +2,13 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+
+    <!-- Sorgt dafür, dass die Webseite auf allen Bildschirmgrössen korrekt skaliert -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Choose your film</title>
+
+    <!-- Verknüpfung mit der CSS-Datei -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,6 +17,7 @@
     </header>
 
     <main>
+        <!-- Filterbereich für Marke und Farbfilm -->
         <div class="filter-container">
             <div class="brand-filter">
                 <select id="brandFilter" class="filter-input">
@@ -32,8 +38,10 @@
             </div>
         </div>
 
+        <!-- Hier werden die gefilterten Filme per JavaScript eingefügt -->
         <section id="results"></section>
 
+        <!-- Bereich mit Kamera, Blitz und animierter Filmrolle -->
         <div class="camera-stage">
             <img src="img/camera.png" class="camera" alt="Kamera">
             <div id="flash" class="flash"></div>
@@ -45,6 +53,7 @@
         <p>This is the footer of the page.</p>
     </footer>
 
+    <!-- Verknüpfung mit der JavaScript-Datei -->
     <script src="js/script.js" type="module"></script>
 </body>
 </html>

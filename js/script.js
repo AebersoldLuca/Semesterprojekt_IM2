@@ -1,3 +1,4 @@
+// Lädt die Filmdaten über die lokale PHP-CORS-Bridge
 async function loadData() {
     const url = 'api_cors_bridge.php';
 
@@ -12,6 +13,7 @@ async function loadData() {
 
 const data = await loadData();
 
+// Wichtige DOM-Elemente aus dem HTML holen
 const brandFilter = document.querySelector('#brandFilter');
 const colorFilter = document.querySelector('#colorFilter');
 const searchButton = document.querySelector('#searchButton');
@@ -21,6 +23,7 @@ const flash = document.querySelector('#flash');
 const camera = document.querySelector('.camera');
 const cameraStage = document.querySelector('.camera-stage');
 
+// Erstellt automatisch alle Marken-Optionen im Brand-Filter
 function createBrandOptions() {
     const brands = [];
 
@@ -40,6 +43,7 @@ function createBrandOptions() {
     });
 }
 
+// Filtert die Filme anhand der ausgewählten Marke und Farbe
 function filterFilms() {
     const selectedBrand = brandFilter.value;
     const selectedColor = colorFilter.value;
@@ -57,6 +61,7 @@ function filterFilms() {
     showFilms(filteredFilms);
 }
 
+// Erstellt für jeden gefilterten Film eine sichtbare Karte
 function showFilms(films) {
     resultsContainer.innerHTML = '';
 
@@ -92,6 +97,7 @@ function showFilms(films) {
     });
 }
 
+// Animiert das angeklickte Filmbild zur Kamera und startet danach Blitz und Filmrolle
 function animateIntoCamera(image, film) {
     filmRoll.classList.remove('visible');
     filmRoll.innerHTML = '';
@@ -142,6 +148,7 @@ function animateIntoCamera(image, film) {
     }, 1000);
 }
 
+// Füllt die Filmrolle mit den wichtigsten Daten des ausgewählten Films
 function showFilmRoll(film) {
     filmRoll.innerHTML = '';
 
@@ -166,6 +173,7 @@ function showFilmRoll(film) {
     filmRoll.classList.add('visible');
 }
 
+// Erstellt ein einzelnes Feld innerhalb der Filmrolle
 function createFilmFrame(text) {
     const frame = document.createElement('div');
     frame.classList.add('film-frame');
@@ -177,14 +185,13 @@ function createFilmFrame(text) {
     filmRoll.appendChild(frame);
 }
 
+// Aktualisiert die Position des Taschenlampen-Effekts innerhalb eines Filmfeldes
 filmRoll.addEventListener('mousemove', event => {
     const frame = event.target.closest('.film-frame');
 
     if (!frame) {
         return;
     }
-
-    const rect = frame.getBoundingClientRect();
 
     const x = event.offsetX;
     const y = event.offsetY;
@@ -193,6 +200,7 @@ filmRoll.addEventListener('mousemove', event => {
     frame.style.setProperty('--frame-y', `${y}px`);
 });
 
+// Gibt Markennamen schöner formatiert aus
 function formatBrand(brand) {
     const brandNames = {
         catlabs: 'CatLABS',
@@ -214,8 +222,10 @@ function formatBrand(brand) {
     return brandNames[brand] || brand;
 }
 
+// Startet die Suche erst, wenn der Button geklickt wird
 searchButton.addEventListener('click', filterFilms);
 
+// Beim Laden werden nur die Filter vorbereitet, noch keine Filmkarten angezeigt
 if (data) {
     createBrandOptions();
 } else {
