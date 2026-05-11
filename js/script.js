@@ -1,4 +1,3 @@
-// Daten holen
 async function loadData() {
     const url = 'api_cors_bridge.php';
 
@@ -19,8 +18,9 @@ const searchButton = document.querySelector('#searchButton');
 const resultsContainer = document.querySelector('#results');
 const filmRoll = document.querySelector('#filmRoll');
 const flash = document.querySelector('#flash');
+const camera = document.querySelector('.camera');
+const cameraStage = document.querySelector('.camera-stage');
 
-// Brands automatisch in Select einfügen
 function createBrandOptions() {
     const brands = [];
 
@@ -35,12 +35,11 @@ function createBrandOptions() {
     brands.forEach(brand => {
         const option = document.createElement('option');
         option.value = brand;
-        option.innerText = brand;
+        option.innerText = formatBrand(brand);
         brandFilter.appendChild(option);
     });
 }
 
-// Filme filtern
 function filterFilms() {
     const selectedBrand = brandFilter.value;
     const selectedColor = colorFilter.value;
@@ -58,12 +57,11 @@ function filterFilms() {
     showFilms(filteredFilms);
 }
 
-// Filme anzeigen
 function showFilms(films) {
     resultsContainer.innerHTML = '';
 
     if (films.length === 0) {
-        resultsContainer.innerHTML = '<p>Keine Filme gefunden.</p>';
+        resultsContainer.innerHTML = '<p>No suitable film roll was found.</p>';
         return;
     }
 
@@ -94,68 +92,107 @@ function showFilms(films) {
     });
 }
 
-// Bild-Animation zur Kamera
 function animateIntoCamera(image, film) {
+    filmRoll.classList.remove('visible');
+    filmRoll.innerHTML = '';
+
+    const imageRect = image.getBoundingClientRect();
+
+    image.style.setProperty('--start-x', `${imageRect.left}px`);
+    image.style.setProperty('--start-y', `${imageRect.top}px`);
+    image.style.setProperty('--start-width', `${imageRect.width}px`);
+
     image.classList.add('fly-to-camera');
 
+    cameraStage.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+
     setTimeout(() => {
-        flash.classList.add('active');
+        const cameraRect = camera.getBoundingClientRect();
+
+        image.style.setProperty(
+            '--end-x',
+            `${cameraRect.left + cameraRect.width / 2}px`
+        );
+
+        image.style.setProperty(
+            '--end-y',
+            `${cameraRect.top + cameraRect.height * 0.38}px`
+        );
 
         setTimeout(() => {
-            flash.classList.remove('active');
-            showFilmRoll(film);
-        }, 400);
-    }, 700);
+            flash.classList.add('active');
+
+            setTimeout(() => {
+                flash.classList.remove('active');
+
+                showFilmRoll(film);
+
+                image.classList.remove('fly-to-camera');
+
+                image.style.removeProperty('--start-x');
+                image.style.removeProperty('--start-y');
+                image.style.removeProperty('--start-width');
+                image.style.removeProperty('--end-x');
+                image.style.removeProperty('--end-y');
+            }, 800);
+        }, 1600);
+    }, 1000);
 }
 
-// Filmrolle anzeigen
 function showFilmRoll(film) {
     filmRoll.innerHTML = '';
 
-    const title = document.createElement('h3');
-    title.innerText = `${formatBrand(film.brand)} ${film.name}`;
+    createFilmFrame(`Name: ${formatBrand(film.brand)} ${film.name}`);
+    createFilmFrame(`ISO: ${film.iso}`);
+    createFilmFrame(`Color: ${film.color ? 'Yes' : 'No'}`);
 
-    const iso = document.createElement('p');
-    iso.innerText = `ISO: ${film.iso}`;
+    if (film.keyFeatures && film.keyFeatures.length > 0) {
+        film.keyFeatures.forEach(featureObject => {
+            createFilmFrame(featureObject.feature);
+        });
+    } else {
+        createFilmFrame('No Features available');
+    }
 
-    const process = document.createElement('p');
-    process.innerText = `Prozess: ${film.process}`;
+    const frames = filmRoll.querySelectorAll('.film-frame');
+    const rollHeight = frames.length * 130;
 
-    const color = document.createElement('p');
-    color.innerText = `Farbe: ${film.color ? 'Ja' : 'Nein'}`;
-
-    const format35 = document.createElement('p');
-    format35.innerText = `35mm: ${film.formatThirtyFive ? 'Ja' : 'Nein'}`;
-
-    const format120 = document.createElement('p');
-    format120.innerText = `120: ${film.formatOneTwenty ? 'Ja' : 'Nein'}`;
-
-    const description = document.createElement('p');
-    description.innerText = film.description;
-
-    filmRoll.appendChild(title);
-    filmRoll.appendChild(iso);
-    filmRoll.appendChild(process);
-    filmRoll.appendChild(color);
-    filmRoll.appendChild(format35);
-    filmRoll.appendChild(format120);
-    filmRoll.appendChild(description);
+    filmRoll.style.setProperty('--film-roll-height', `${rollHeight}px`);
+    cameraStage.style.minHeight = `${rollHeight + window.innerHeight}px`;
 
     filmRoll.classList.add('visible');
 }
 
-// Taschenlampen-Effekt
+function createFilmFrame(text) {
+    const frame = document.createElement('div');
+    frame.classList.add('film-frame');
+
+    const paragraph = document.createElement('p');
+    paragraph.innerText = text;
+
+    frame.appendChild(paragraph);
+    filmRoll.appendChild(frame);
+}
+
 filmRoll.addEventListener('mousemove', event => {
-    const rect = filmRoll.getBoundingClientRect();
+    const frame = event.target.closest('.film-frame');
 
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    if (!frame) {
+        return;
+    }
 
-    filmRoll.style.setProperty('--x', `${x}px`);
-    filmRoll.style.setProperty('--y', `${y}px`);
+    const rect = frame.getBoundingClientRect();
+
+    const x = event.offsetX;
+    const y = event.offsetY;
+
+    frame.style.setProperty('--frame-x', `${x}px`);
+    frame.style.setProperty('--frame-y', `${y}px`);
 });
 
-// Brand schöner anzeigen
 function formatBrand(brand) {
     const brandNames = {
         catlabs: 'CatLABS',
@@ -177,12 +214,10 @@ function formatBrand(brand) {
     return brandNames[brand] || brand;
 }
 
-// Event Listener
 searchButton.addEventListener('click', filterFilms);
 
-// Start
 if (data) {
     createBrandOptions();
 } else {
-    resultsContainer.innerHTML = '<p>Die Daten konnten nicht geladen werden.</p>';
+    resultsContainer.innerHTML = '<p>The data could not be loaded.</p>';
 }
