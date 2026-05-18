@@ -2,13 +2,9 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-
-    <!-- Sorgt dafür, dass die Webseite auf allen Bildschirmgrössen korrekt skaliert -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Choose your film</title>
-
-    <!-- Verknüpfung mit der CSS-Datei -->
+    <link rel="stylesheet" href="https://use.typekit.net/whd0fhi.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -17,20 +13,33 @@
     </header>
 
     <main>
-        <!-- Filterbereich für Marke und Farbfilm -->
         <div class="filter-container">
-            <div class="brand-filter">
-                <select id="brandFilter" class="filter-input">
-                    <option value="">Brand</option>
-                </select>
+            <!-- Custom Dropdown: Brand -->
+            <div class="custom-select" id="brandFilter">
+                <div class="custom-select__trigger">
+                    <span>Brand</span>
+                    <svg width="10" height="7" viewBox="0 0 10 7" fill="none">
+                        <path d="M1 1L5 5.5L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="custom-select__options">
+                    <div class="custom-option selected" data-value="">All brands</div>
+                </div>
             </div>
 
-            <div class="color-filter">
-                <select id="colorFilter" class="filter-input">
-                    <option value="">Color</option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
+            <!-- Custom Dropdown: Color -->
+            <div class="custom-select" id="colorFilter">
+                <div class="custom-select__trigger">
+                    <span>Color</span>
+                    <svg width="10" height="7" viewBox="0 0 10 7" fill="none">
+                        <path d="M1 1L5 5.5L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="custom-select__options">
+                    <div class="custom-option selected" data-value="">All</div>
+                    <div class="custom-option" data-value="true">Yes</div>
+                    <div class="custom-option" data-value="false">No</div>
+                </div>
             </div>
 
             <div class="search-button">
@@ -38,22 +47,43 @@
             </div>
         </div>
 
-        <!-- Hier werden die gefilterten Filme per JavaScript eingefügt -->
-        <section id="results"></section>
+        <!-- Filmkarten + Click-Hint nebeneinander -->
+        <div class="results-area">
+            <section id="results"></section>
 
-        <!-- Bereich mit Kamera, Blitz und animierter Filmrolle -->
+            <div id="clickHint" class="click-hint">
+                <!-- Gebogener Pfeil nach links mit Spitze -->
+                <svg width="50" height="30" viewBox="0 0 50 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M46 4 C28 4 16 22 4 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <polyline points="12,16 4,22 12,28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <span>click here</span>
+            </div>
+        </div>
+
+        <!-- Kamerabereich -->
         <div class="camera-stage">
             <img src="img/camera.png" class="camera" alt="Kamera">
             <div id="flash" class="flash"></div>
-            <div id="filmRoll" class="film-roll"></div>
+
+            <!-- Filmrolle mittig; Hover-Hint absolut daneben -->
+            <div class="film-roll-wrapper">
+                <div id="filmRoll" class="film-roll"></div>
+
+                <div id="hoverHint" class="hover-hint">
+                    <!-- Gebogener Pfeil nach links mit Spitze -->
+                    <svg width="50" height="30" viewBox="0 0 50 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M46 4 C28 4 16 22 4 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <polyline points="12,16 4,22 12,28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                    <span>hover with your mouse</span>
+                </div>
+            </div>
+
+            <!-- Erscheint erst wenn die Rolle komplett ausgefahren ist -->
+            <button id="tryFilmButton">Try your film</button>
         </div>
     </main>
-
-    <footer>
-        <p>This is the footer of the page.</p>
-    </footer>
-
-    <!-- Verknüpfung mit der JavaScript-Datei -->
     <script src="js/script.js" type="module"></script>
 </body>
 </html>

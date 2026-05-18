@@ -14,16 +14,61 @@ async function loadData() {
 const data = await loadData();
 
 // Wichtige DOM-Elemente aus dem HTML holen
-const brandFilter = document.querySelector('#brandFilter');
-const colorFilter = document.querySelector('#colorFilter');
-const searchButton = document.querySelector('#searchButton');
+const brandFilterEl   = document.querySelector('#brandFilter');
+const colorFilterEl   = document.querySelector('#colorFilter');
+const searchButton    = document.querySelector('#searchButton');
 const resultsContainer = document.querySelector('#results');
-const filmRoll = document.querySelector('#filmRoll');
-const flash = document.querySelector('#flash');
-const camera = document.querySelector('.camera');
-const cameraStage = document.querySelector('.camera-stage');
+const filmRoll        = document.querySelector('#filmRoll');
+const flash           = document.querySelector('#flash');
+const camera          = document.querySelector('.camera');
+const cameraStage     = document.querySelector('.camera-stage');
+const clickHint       = document.querySelector('#clickHint');
+const hoverHint       = document.querySelector('#hoverHint');
+const tryFilmButton   = document.querySelector('#tryFilmButton');
 
-// Erstellt automatisch alle Marken-Optionen im Brand-Filter
+// Aktuell gewählte Filterwerte
+let selectedBrandValue = '';
+let selectedColorValue = '';
+
+// Custom-Dropdown Logik
+function initCustomDropdowns() {
+    document.querySelectorAll('.custom-select').forEach(select => {
+        const triggerLabel   = select.querySelector('.custom-select__trigger span');
+        const optionsContainer = select.querySelector('.custom-select__options');
+
+        // Öffnen / Schliessen beim Klick auf den Trigger
+        select.addEventListener('click', e => {
+            e.stopPropagation();
+            const isOpen = select.classList.contains('open');
+            document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
+            if (!isOpen) select.classList.add('open');
+        });
+
+        // Option auswählen – stopPropagation verhindert, dass der Select-Handler danach nochmals öffnet
+        optionsContainer.addEventListener('click', e => {
+            e.stopPropagation();
+            const option = e.target.closest('.custom-option');
+            if (!option) return;
+
+            triggerLabel.textContent = option.textContent;
+
+            optionsContainer.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+
+            if (select.id === 'brandFilter') selectedBrandValue = option.dataset.value;
+            if (select.id === 'colorFilter') selectedColorValue = option.dataset.value;
+
+            select.classList.remove('open');
+        });
+    });
+
+    // Schliessen bei Klick ausserhalb
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
+    });
+}
+
+// Erstellt automatisch alle Marken-Optionen im Brand-Dropdown
 function createBrandOptions() {
     const brands = [];
 
@@ -35,27 +80,27 @@ function createBrandOptions() {
 
     brands.sort();
 
+    const optionsContainer = brandFilterEl.querySelector('.custom-select__options');
+
     brands.forEach(brand => {
-        const option = document.createElement('option');
-        option.value = brand;
-        option.innerText = formatBrand(brand);
-        brandFilter.appendChild(option);
+        const option = document.createElement('div');
+        option.classList.add('custom-option');
+        option.dataset.value = brand;
+        option.textContent = formatBrand(brand);
+        optionsContainer.appendChild(option);
     });
 }
 
-// Filtert die Filme anhand der ausgewählten Marke und Farbe
+// Filtert die Filme anhand der ausgewählten Werte
 function filterFilms() {
-    const selectedBrand = brandFilter.value;
-    const selectedColor = colorFilter.value;
-
     let filteredFilms = data;
 
-    if (selectedBrand !== '') {
-        filteredFilms = filteredFilms.filter(film => film.brand === selectedBrand);
+    if (selectedBrandValue !== '') {
+        filteredFilms = filteredFilms.filter(film => film.brand === selectedBrandValue);
     }
 
-    if (selectedColor !== '') {
-        filteredFilms = filteredFilms.filter(film => String(film.color) === selectedColor);
+    if (selectedColorValue !== '') {
+        filteredFilms = filteredFilms.filter(film => String(film.color) === selectedColorValue);
     }
 
     showFilms(filteredFilms);
@@ -64,6 +109,9 @@ function filterFilms() {
 // Erstellt für jeden gefilterten Film eine sichtbare Karte
 function showFilms(films) {
     resultsContainer.innerHTML = '';
+    hoverHint.classList.remove('visible');
+    clickHint.classList.remove('visible');
+    tryFilmButton.style.display = 'none';
 
     if (films.length === 0) {
         resultsContainer.innerHTML = '<p>No suitable film roll was found.</p>';
@@ -95,12 +143,16 @@ function showFilms(films) {
 
         resultsContainer.appendChild(item);
     });
+
+    clickHint.classList.add('visible');
 }
 
 // Animiert das angeklickte Filmbild zur Kamera und startet danach Blitz und Filmrolle
 function animateIntoCamera(image, film) {
     filmRoll.classList.remove('visible');
     filmRoll.innerHTML = '';
+    hoverHint.classList.remove('visible');
+    tryFilmButton.style.display = 'none';
 
     const imageRect = image.getBoundingClientRect();
 
@@ -144,7 +196,7 @@ function animateIntoCamera(image, film) {
                 image.style.removeProperty('--end-x');
                 image.style.removeProperty('--end-y');
             }, 800);
-        }, 1600);
+        }, 800);
     }, 1000);
 }
 
@@ -164,13 +216,17 @@ function showFilmRoll(film) {
         createFilmFrame('No Features available');
     }
 
-    const frames = filmRoll.querySelectorAll('.film-frame');
-    const rollHeight = frames.length * 130;
+    const rollHeight = filmRoll.scrollHeight;
 
     filmRoll.style.setProperty('--film-roll-height', `${rollHeight}px`);
     cameraStage.style.minHeight = `${rollHeight + window.innerHeight}px`;
 
     filmRoll.classList.add('visible');
+
+    setTimeout(() => {
+        hoverHint.classList.add('visible');
+        tryFilmButton.style.display = 'inline-block';
+    }, 2700);
 }
 
 // Erstellt ein einzelnes Feld innerhalb der Filmrolle
@@ -225,8 +281,17 @@ function formatBrand(brand) {
 // Startet die Suche erst, wenn der Button geklickt wird
 searchButton.addEventListener('click', filterFilms);
 
-// Beim Laden werden nur die Filter vorbereitet, noch keine Filmkarten angezeigt
+// Try-your-film scrollt zur Filterleiste hoch
+tryFilmButton.addEventListener('click', () => {
+    document.querySelector('.filter-container').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+});
+
+// Beim Laden: Dropdowns initialisieren und Brand-Optionen befüllen
 if (data) {
+    initCustomDropdowns();
     createBrandOptions();
 } else {
     resultsContainer.innerHTML = '<p>The data could not be loaded.</p>';

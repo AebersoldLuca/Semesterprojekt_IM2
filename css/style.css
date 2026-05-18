@@ -1,18 +1,30 @@
-/* Grundreset für alle Elemente */
+:root {
+    --primary-color: #FFAA36;
+    --primary-text: #2F2F2F;
+    --background-color: #FEF6E9;
+    --background-color-2: #D9D9D9;
+    --accent-color-1: #FDA7D2;
+    --accent-color-2: #1253F9;
+    --accent-color-3: #FF4450;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Sanftes Scrollen beim Sprung zur Kamera */
 html {
     scroll-behavior: smooth;
 }
 
 body {
-    background-color: pink;
-    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--primary-text);
+    font-family: "pacaembu", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    text-transform: uppercase;
 }
 
 header {
@@ -20,60 +32,205 @@ header {
     padding: 40px 20px;
 }
 
-/* Filterbereich oben auf der Seite */
+h1 {
+    color: var(--primary-color);
+    font-size: clamp(1.4rem, 5vw, 2.8rem);
+}
+
+/* ── Filter ── */
 .filter-container {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    gap: 20px;
+    gap: 30px;
     margin-bottom: 40px;
 }
 
-.filter-input,
-#searchButton {
-    width: 200px;
-    height: 34px;
+/* ── Custom Dropdowns ── */
+.custom-select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    border-bottom: 3px solid var(--accent-color-1);
+    padding-bottom: 4px;
+    cursor: pointer;
+    user-select: none;
 }
 
-/* Bereich, in dem die Filmkarten erscheinen */
+.custom-select__trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary-text);
+    font-family: inherit;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.custom-select__trigger svg {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    color: var(--primary-text);
+}
+
+.custom-select.open .custom-select__trigger svg {
+    transform: rotate(180deg);
+}
+
+.custom-select__options {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    background: var(--background-color);
+    border-radius: 10px;
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12);
+    border: 1.5px solid var(--background-color-2);
+    min-width: 100%;
+    display: none;
+    z-index: 200;
+    overflow: hidden;
+}
+
+.custom-select.open .custom-select__options {
+    display: block;
+}
+
+.custom-option {
+    padding: 10px 18px;
+    font-family: inherit;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--primary-text);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.12s ease;
+}
+
+.custom-option:hover {
+    background: var(--background-color-2);
+}
+
+.custom-option.selected {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* ── Buttons – Pill mit verschobenem Hintergrund ── */
+button {
+    position: relative;
+    z-index: 0;
+    background: transparent;
+    color: var(--primary-text);
+    border: none;
+    border-radius: 100px;
+    padding: 2px 30px;
+    width: auto;
+    height: auto;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+/* Hintergrund */
+button::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+
+    left: 8px;
+    right: 8px;
+    top: 0;
+    bottom: 0;
+
+    background: var(--primary-color);
+    border-radius: 100px;
+
+    transform: translateY(8px);
+    transition: transform 0.25s ease, background 0.25s ease;
+}
+
+/* Hover */
+button:hover::before {
+    transform: translateY(0);
+}
+
+/* ── Ergebnisbereich: Karten + Click-Hint nebeneinander ── */
+.results-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Filmkarten – rund, kein Padding */
 #results {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     min-height: 0;
+    padding: 10px 10px 30px;
+    gap: 16px;
 }
 
-/* Einzelne Filmkarte */
 .film-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 240px;
-    background-color: blue;
-    color: white;
-    padding: 20px;
-    margin: 20px 10px;
-    border-radius: 20px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background-color: var(--background-color-2);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
 }
 
-.film-card h2 {
-    font-size: 20px;
-    margin: 15px 0 10px;
-    text-align: center;
+.film-card:hover {
+    transform: scale(1.18);
 }
 
+.film-card h2,
 .film-card p {
-    font-size: 14px;
-    line-height: 1.4;
+    display: none;
 }
 
 .film-image {
-    width: 200px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: 50%;
 }
 
-/* Kamerabereich mit Kamera, Blitz und Filmrolle */
+/* ── Click-Hint (neben den Bildern, seitlich) ── */
+.click-hint {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-color-2);
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    flex-shrink: 0;
+    padding: 0 16px;
+    animation: bounceUp 1.3s ease-in-out infinite;
+}
+
+.click-hint.visible {
+    display: flex;
+}
+
+@keyframes bounceUp {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-7px); }
+}
+
+/* ── Kamerabereich ── */
 .camera-stage {
     position: relative;
     min-height: 100vh;
@@ -85,7 +242,6 @@ header {
     overflow: visible;
 }
 
-/* Kamera liegt visuell vor Filmrolle und fliegendem Bild */
 .camera {
     position: relative;
     z-index: 100;
@@ -93,15 +249,18 @@ header {
     max-width: 900px;
 }
 
-/* Bild fliegt nach dem Klick zur Kamera */
+/* ── Flug-Animation des Filmbilds ── */
 .film-image.fly-to-camera {
     position: fixed;
     left: var(--start-x);
     top: var(--start-y);
     width: var(--start-width);
+    height: var(--start-width);
+    border-radius: 50%;
     z-index: 50;
-    animation: flyToCamera 1.6s ease-in forwards;
+    animation: flyToCamera 0.4s ease-in forwards;
     pointer-events: none;
+    object-fit: cover;
 }
 
 @keyframes flyToCamera {
@@ -109,7 +268,6 @@ header {
         opacity: 1;
         transform: scale(1);
     }
-
     100% {
         left: var(--end-x);
         top: var(--end-y);
@@ -119,7 +277,7 @@ header {
     }
 }
 
-/* Weisser Vollbild-Blitz nach dem Einziehen des Films */
+/* ── Blitz ── */
 .flash {
     position: fixed;
     inset: 0;
@@ -134,30 +292,24 @@ header {
 }
 
 @keyframes cameraFlash {
-    0% {
-        opacity: 0;
-    }
-
-    10% {
-        opacity: 1;
-    }
-
-    25% {
-        opacity: 0.85;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0%   { opacity: 0; }
+    10%  { opacity: 1; }
+    25%  { opacity: 0.85; }
+    100% { opacity: 0; }
 }
 
-/* Filmrolle fährt hinter der Kamera nach unten aus */
+/* ── Filmrolle – mittig, Hover-Hint absolut daneben ── */
+.film-roll-wrapper {
+    display: inline-block;
+    position: relative;
+    margin-top: -20px;
+}
+
 .film-roll {
     position: relative;
     width: 240px;
     height: 0;
     overflow: hidden;
-    margin-top: -12px;
     background: #050505;
     color: white;
     z-index: 3;
@@ -166,9 +318,7 @@ header {
     transform: translateY(-100%);
 }
 
-/* Hinweis, dass man mit der Maus über die Filmrolle fahren soll */
 .film-roll::after {
-    content: "Move your mouse over the film to reveal the information";
     position: absolute;
     top: 20px;
     left: 50%;
@@ -197,7 +347,6 @@ header {
         opacity: 0;
         transform: translateY(-100%);
     }
-
     100% {
         height: var(--film-roll-height);
         opacity: 1;
@@ -205,12 +354,45 @@ header {
     }
 }
 
-/* Mauszeiger verschwindet, damit der Taschenlampen-Effekt wirkt */
 .film-roll:hover {
     cursor: none;
 }
 
-/* Einzelnes Feld auf der Filmrolle */
+/* ── Hover-Hint – absolut rechts neben der Filmrolle ── */
+.hover-hint {
+    position: absolute;
+    left: calc(100% + 20px);
+    top: 45px;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent-color-2);
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    animation: bounceLeft 1.3s ease-in-out infinite;
+}
+
+.hover-hint.visible {
+    display: flex;
+}
+
+@keyframes bounceLeft {
+    0%, 100% { transform: translateX(0); }
+    50%       { transform: translateX(7px); }
+}
+
+/* ── Try-your-film ── */
+#tryFilmButton {
+    display: none;
+    margin-top: 40px;
+    position: relative;
+    z-index: 101;
+}
+
+/* ── Filmfelder ── */
 .film-frame {
     position: relative;
     min-height: 130px;
@@ -223,7 +405,6 @@ header {
     text-align: center;
 }
 
-/* Filmloch-Effekt links und rechts */
 .film-frame::before,
 .film-frame::after {
     content: "";
@@ -240,15 +421,9 @@ header {
     );
 }
 
-.film-frame::before {
-    left: 10px;
-}
+.film-frame::before { left: 10px; }
+.film-frame::after  { right: 10px; }
 
-.film-frame::after {
-    right: 10px;
-}
-
-/* Text ist standardmässig unsichtbar */
 .film-frame p {
     font-size: 18px;
     line-height: 1.4;
@@ -256,24 +431,20 @@ header {
     transition: opacity 0.15s ease;
 }
 
-/* Taschenlampen-Effekt: Nur ein runder Bereich um die Maus zeigt den Text */
 .film-frame:hover p {
     opacity: 1;
-
     mask-image: radial-gradient(
         circle 85px at var(--frame-x) var(--frame-y),
         black 0%,
         black 55%,
         transparent 100%
     );
-
     -webkit-mask-image: radial-gradient(
         circle 85px at var(--frame-x) var(--frame-y),
         black 0%,
         black 55%,
         transparent 100%
     );
-
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
 }
@@ -281,4 +452,141 @@ header {
 footer {
     text-align: center;
     padding: 30px;
+}
+
+/* ══════════════════════════════════════════════
+   Responsive
+══════════════════════════════════════════════ */
+
+/* ── Tablet (≤ 900px) ── */
+@media (max-width: 900px) {
+
+    .film-card {
+        width: 130px;
+        height: 130px;
+    }
+
+    /* Hover-Hint etwas kompakter */
+    .hover-hint {
+        font-size: 11px;
+        gap: 8px;
+        padding-left: 12px;
+    }
+
+    /* Filmrolle Felder etwas kompakter */
+    .film-frame {
+        min-height: 115px;
+        padding: 20px 34px;
+    }
+
+    .film-frame p {
+        font-size: 16px;
+    }
+}
+
+/* ── Mobile (≤ 540px) ── */
+@media (max-width: 540px) {
+
+    header {
+        padding: 24px 16px;
+    }
+
+    /* Filter vertikal stapeln */
+    .filter-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+        margin-bottom: 28px;
+    }
+
+    /* Custom-Select Optionen zentriert öffnen */
+    .custom-select__options {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Filmkarten kleiner */
+    .film-card {
+        width: 105px;
+        height: 105px;
+    }
+
+    #results {
+        gap: 10px;
+        padding: 8px 8px 16px;
+    }
+
+    /* Click-Hint unterhalb der Karten (Spalte) */
+    .results-area {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .click-hint {
+        flex-direction: row;
+        padding: 10px 0 20px;
+        gap: 10px;
+    }
+
+    /* Kamera */
+    .camera {
+        width: 96vw;
+    }
+
+    /* Filmrolle + Hover-Hint als vertikale Spalte */
+    .film-roll-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Hover-Hint unterhalb der Filmrolle */
+    .hover-hint {
+        position: static;
+        padding-top: 16px;
+        padding-left: 0;
+        flex-direction: row;
+        justify-content: center;
+        white-space: normal;
+        font-size: 12px;
+        animation: bounceUp 1.3s ease-in-out infinite;
+    }
+
+    /* Hover-Hint auf Mobile komplett ausblenden */
+    .hover-hint {
+        display: none !important;
+    }
+
+    /* Pfeil bei Click-here zeigt nach oben (Filme sind darüber) */
+    .click-hint svg {
+        transform: rotate(90deg);
+        flex-shrink: 0;
+    }
+
+    /* Filmrahmen kompakter */
+    .film-frame {
+        min-height: 100px;
+        padding: 16px 30px;
+    }
+
+    /* Text auf Mobile immer sichtbar, kein Hover-Effekt nötig */
+    .film-frame p {
+        font-size: 14px;
+        opacity: 1;
+    }
+
+    .film-frame:hover p {
+        mask-image: none;
+        -webkit-mask-image: none;
+    }
+
+    /* Button Touch-freundlicher */
+    button {
+        padding: 13px 28px;
+        min-height: 44px;
+    }
+
+    #tryFilmButton {
+        margin-top: 24px;
+    }
 }
