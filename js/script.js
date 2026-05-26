@@ -377,19 +377,36 @@ function initCameraPage() {
 
     let capturedDataURL = null;
 
-    // Nimmt einen Schnappschuss auf: spiegelt das Bild, wendet CSS-Filter und Pixel-Korn an und zeigt das Ergebnis unterhalb des Live-Feeds an.
+    // Nimmt einen Schnappschuss auf: schneidet auf den sichtbaren Ausschnitt zu,
+    // spiegelt das Bild, wendet CSS-Filter und Pixel-Korn an und zeigt das Ergebnis unterhalb des Live-Feeds an.
     captureButton.addEventListener('click', () => {
         if (!webcamVideo.videoWidth) return;
 
+        // Sichtbaren Ausschnitt berechnen – gleiche Logik wie object-fit: cover im Browser.
+        const wrapper       = document.querySelector('.webcam-wrapper');
+        const displayAspect = wrapper.clientWidth / wrapper.clientHeight;
+        const videoW        = webcamVideo.videoWidth;
+        const videoH        = webcamVideo.videoHeight;
+        const videoAspect   = videoW / videoH;
+
+        let sx = 0, sy = 0, sw = videoW, sh = videoH;
+        if (videoAspect > displayAspect) {
+            sw = videoH * displayAspect;
+            sx = (videoW - sw) / 2;
+        } else if (videoAspect < displayAspect) {
+            sh = videoW / displayAspect;
+            sy = (videoH - sh) / 2;
+        }
+
         const canvas = document.createElement('canvas');
-        canvas.width  = webcamVideo.videoWidth;
-        canvas.height = webcamVideo.videoHeight;
+        canvas.width  = Math.round(sw);
+        canvas.height = Math.round(sh);
         const ctx = canvas.getContext('2d');
 
         ctx.translate(canvas.width, 0);
         ctx.scale(-1, 1);
         if (filmFilter.css !== 'none') ctx.filter = filmFilter.css;
-        ctx.drawImage(webcamVideo, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(webcamVideo, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
 
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.filter = 'none';

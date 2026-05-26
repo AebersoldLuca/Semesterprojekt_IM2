@@ -164,7 +164,7 @@ button::before {
     background: var(--primary-color);
     border-radius: 100px;
 
-    transform: translateY(8px);
+    transform: translateY(12px);
     transition: transform 0.25s ease, background 0.25s ease;
 }
 
@@ -244,7 +244,7 @@ button:hover::before {
     border-radius: 50%;
 }
 
-/* ── Click-Hint (unterhalb der Bilder, leicht rechts der Mitte) ── */
+/* ── Click-Hint (unterhalb der Bilder, zentriert) ── */
 .click-hint {
     display: none;
     flex-direction: column;
@@ -257,15 +257,11 @@ button:hover::before {
     width: fit-content;
     margin: 0 auto;
     padding-bottom: 16px;
-    position: relative;
-    left: 60px;
     animation: bounceUp 1.3s ease-in-out infinite;
 }
 
 .click-hint.visible {
     display: flex;
-    position: absolute;
-    left: 70vw;
 }
 
 @keyframes bounceUp {
@@ -639,14 +635,14 @@ footer {
         padding: 20px 16px 14px;
     }
 
-    /* Buttons: schlank, weniger hoch */
+    /* Buttons: schlank, kein Hover-Effekt, Hintergrund direkt hinter dem Text */
     button {
         padding: 3px 20px;
         font-size: 12px;
     }
 
     button::before {
-        transform: translateY(5px);
+        transform: translateY(0);
         left: 6px;
         right: 6px;
     }
@@ -682,7 +678,6 @@ footer {
     }
 
     .click-hint {
-        left: 20px;
         padding-bottom: 12px;
     }
 
