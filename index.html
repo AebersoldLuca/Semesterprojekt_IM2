@@ -10,6 +10,7 @@
 <body>
     <header>
         <h1>Choose your film</h1>
+        <p class="intro-text">Browse our selection of analog film stocks, filter by brand or color type, and click on a film to explore its characteristics — then try the look live with your own camera.</p>
     </header>
 
     <main>
@@ -37,8 +38,8 @@
                 </div>
                 <div class="custom-select__options">
                     <div class="custom-option selected" data-value="">All</div>
-                    <div class="custom-option" data-value="true">Yes</div>
-                    <div class="custom-option" data-value="false">No</div>
+                    <div class="custom-option" data-value="true">Color</div>
+                    <div class="custom-option" data-value="false">Black / White</div>
                 </div>
             </div>
 
@@ -47,18 +48,28 @@
             </div>
         </div>
 
-        <!-- Filmkarten + Click-Hint nebeneinander -->
+        <!-- Filmkarten -->
         <div class="results-area">
             <section id="results"></section>
+        </div>
 
-            <div id="clickHint" class="click-hint">
-                <!-- Gebogener Pfeil nach links mit Spitze -->
-                <svg width="50" height="30" viewBox="0 0 50 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M46 4 C28 4 16 22 4 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                    <polyline points="12,16 4,22 12,28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <!-- Click-Hint unterhalb, leicht rechts der Mitte -->
+        <div id="clickHint" class="click-hint">
+            <!-- Gebogener Pfeil nach oben mit Spitze -->
+            <svg width="30" height="50" viewBox="0 0 30 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 46 C20 28 10 20 10 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                <polyline points="4,14 10,6 16,14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+            <span>click here</span>
+        </div>
+
+        <div class="show-more-row">
+            <button id="showMoreBtn">
+                <span>Show all</span>
+                <svg width="10" height="7" viewBox="0 0 10 7" fill="none">
+                    <path d="M1 1L5 5.5L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span>click here</span>
-            </div>
+            </button>
         </div>
 
         <!-- Kamerabereich -->

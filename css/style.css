@@ -37,6 +37,19 @@ h1 {
     font-size: clamp(1.4rem, 5vw, 2.8rem);
 }
 
+.intro-text {
+    margin-top: 16px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    line-height: 1.8;
+    color: var(--primary-text);
+    opacity: 0.55;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    text-transform: uppercase;
+}
+
 /* ── Filter ── */
 .filter-container {
     display: flex;
@@ -178,11 +191,36 @@ button:hover::before {
     gap: 16px;
 }
 
+.film-card.hidden {
+    display: none;
+}
+
+/* ── Show-More-Button ── */
+.show-more-row {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#showMoreBtn {
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+#showMoreBtn svg {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+#showMoreBtn.expanded svg {
+    transform: rotate(180deg);
+}
+
 .film-card {
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    background-color: var(--background-color-2);
+    background-color: white;
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.3s ease;
@@ -206,7 +244,7 @@ button:hover::before {
     border-radius: 50%;
 }
 
-/* ── Click-Hint (neben den Bildern, seitlich) ── */
+/* ── Click-Hint (unterhalb der Bilder, leicht rechts der Mitte) ── */
 .click-hint {
     display: none;
     flex-direction: column;
@@ -216,13 +254,18 @@ button:hover::before {
     font-size: 14px;
     font-weight: bold;
     letter-spacing: 2px;
-    flex-shrink: 0;
-    padding: 0 16px;
+    width: fit-content;
+    margin: 0 auto;
+    padding-bottom: 16px;
+    position: relative;
+    left: 60px;
     animation: bounceUp 1.3s ease-in-out infinite;
 }
 
 .click-hint.visible {
     display: flex;
+    position: absolute;
+    left: 70vw;
 }
 
 @keyframes bounceUp {
@@ -638,22 +681,9 @@ footer {
         padding: 8px 8px 16px;
     }
 
-    /* Click-Hint unterhalb der Karten */
-    .results-area {
-        flex-direction: column;
-        align-items: center;
-    }
-
     .click-hint {
-        flex-direction: row;
-        padding: 8px 0 16px;
-        gap: 10px;
-    }
-
-    /* Pfeil bei Click-here zeigt nach oben */
-    .click-hint svg {
-        transform: rotate(90deg);
-        flex-shrink: 0;
+        left: 20px;
+        padding-bottom: 12px;
     }
 
     /* Kamera */
