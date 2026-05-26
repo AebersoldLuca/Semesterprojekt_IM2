@@ -401,7 +401,7 @@ function initCameraPage() {
         photoResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
 
-    // Löst den Browser-Download des aufgenommenen Fotos als JPEG aus.
+    // Löst den Browser-Download des aufgenommenen Fotos als JPEG aus. 
     downloadButton.addEventListener('click', () => {
         if (!capturedDataURL) return;
         const a = document.createElement('a');
