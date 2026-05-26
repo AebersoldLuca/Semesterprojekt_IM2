@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Try your film</title>
+    <link rel="stylesheet" href="https://use.typekit.net/whd0fhi.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Try your film</h1>
+    </header>
+
+    <main class="webcam-page">
+        <div class="back-row">
+            <button id="backButton">← Back</button>
+        </div>
+
+        <div class="webcam-area">
+            <p class="film-badge" id="filmBadge"></p>
+            <div class="webcam-wrapper">
+                <video id="webcamVideo" autoplay playsinline muted></video>
+                <div class="grain-overlay" id="grainOverlay"></div>
+            </div>
+        </div>
+
+        <button id="captureButton">Take a pic</button>
+
+        <div class="photo-result" id="photoResult">
+            <img id="capturedPhoto" alt="Your photo">
+            <button id="downloadButton" title="Download">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v10M7 15l5 5 5-5"/>
+                    <path d="M4 20h16"/>
+                </svg>
+            </button>
+        </div>
+    </main>
+
+    <script src="js/script.js" type="module"></script>
+</body>
+</html>
