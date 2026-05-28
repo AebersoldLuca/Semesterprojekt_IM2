@@ -38,15 +38,13 @@ h1 {
 }
 
 .intro-text {
-    margin-top: 16px;
+    margin: 16px auto 0;
     font-size: 11px;
     letter-spacing: 1px;
     line-height: 1.8;
     color: var(--primary-text);
     opacity: 0.55;
     max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
     text-transform: uppercase;
 }
 
@@ -470,22 +468,9 @@ button:hover::before {
     transition: opacity 0.15s ease;
 }
 
+/* Opacity via CSS; Taschenlampen-Mask wird per JavaScript als Inline-Style gesetzt */
 .film-frame:hover p {
     opacity: 1;
-    mask-image: radial-gradient(
-        circle 85px at var(--frame-x) var(--frame-y),
-        black 0%,
-        black 55%,
-        transparent 100%
-    );
-    -webkit-mask-image: radial-gradient(
-        circle 85px at var(--frame-x) var(--frame-y),
-        black 0%,
-        black 55%,
-        transparent 100%
-    );
-    mask-repeat: no-repeat;
-    -webkit-mask-repeat: no-repeat;
 }
 
 footer {
@@ -706,11 +691,6 @@ footer {
     .film-frame p {
         font-size: 13px;
         opacity: 1;
-    }
-
-    .film-frame:hover p {
-        mask-image: none;
-        -webkit-mask-image: none;
     }
 
     #tryFilmButton {

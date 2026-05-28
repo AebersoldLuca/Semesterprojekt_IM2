@@ -1,19 +1,24 @@
+/* jshint esversion: 11 */
+
+// ── Gemeinsame Hilfsfunktionen ──────────────────────────────────────────────
+// Werden von beiden Seiten (index.html + camera.html) genutzt.
+
 // Wandelt interne Marken-Keys in lesbare Anzeigenamen um.
 function formatBrand(brand) {
     const brandNames = {
-        catlabs: 'CatLABS',
-        arista: 'Arista',
-        agfaphoto: 'AgfaPhoto',
-        foma: 'Foma',
-        ilford: 'Ilford',
-        kodak: 'Kodak',
-        kono: 'KONO!',
-        'psychedelic blues': 'Psychedelic Blues',
-        revolog: 'Revolog',
-        rollei: 'Rollei',
-        yodica: 'Yodica',
-        dubblefilm: 'dubblefilm',
-        'cinestill film': 'CineStill Film',
+        catlabs:                    'CatLABS',
+        arista:                     'Arista',
+        agfaphoto:                  'AgfaPhoto',
+        foma:                       'Foma',
+        ilford:                     'Ilford',
+        kodak:                      'Kodak',
+        kono:                       'KONO!',
+        'psychedelic blues':        'Psychedelic Blues',
+        revolog:                    'Revolog',
+        rollei:                     'Rollei',
+        yodica:                     'Yodica',
+        dubblefilm:                 'dubblefilm',
+        'cinestill film':           'CineStill Film',
         'film photography project': 'Film Photography Project'
     };
     return brandNames[brand] || brand;
@@ -57,6 +62,7 @@ function getFilmFilter(film) {
     return { css: 'sepia(8%) saturate(1.02) contrast(1.0) brightness(1.02)', grain: 0.06 };
 }
 
+// ── Routing ──────────────────────────────────────────────────────────────────
 // Entscheidet anhand eines eindeutigen DOM-Elements, welche Seite initialisiert wird.
 
 if (document.querySelector('#webcamVideo')) {
@@ -72,7 +78,6 @@ async function initMainPage() {
     const data = await loadData();
 
     const brandFilterEl    = document.querySelector('#brandFilter');
-    const colorFilterEl    = document.querySelector('#colorFilter');
     const searchButton     = document.querySelector('#searchButton');
     const resultsContainer = document.querySelector('#results');
     const filmRoll         = document.querySelector('#filmRoll');
@@ -256,19 +261,20 @@ async function initMainPage() {
         }, 1000);
     }
 
-    // Befüllt die Filmrolle mit den Eigenschaften des gewählten Films und animiert sie aus der Kamera heraus. Blendet danach den «Try your film»-Button ein.
+    // Befüllt die Filmrolle mit den Eigenschaften des gewählten Films und
+    // animiert sie aus der Kamera heraus. Blendet danach den «Try your film»-Button ein.
     function showFilmRoll(film) {
         selectedFilm = film;
         filmRoll.innerHTML = '';
 
-        createFilmFrame(`Name: ${formatBrand(film.brand)} ${film.name}`);
-        createFilmFrame(`ISO: ${film.iso}`);
+        createFilmFrame(`${formatBrand(film.brand)} ${film.name}`);
+        createFilmFrame(`ISO ${film.iso}`);
         createFilmFrame(film.color ? 'Color' : 'Black / White');
 
         if (film.keyFeatures && film.keyFeatures.length > 0) {
             film.keyFeatures.forEach(featureObject => createFilmFrame(featureObject.feature));
         } else {
-            createFilmFrame('No Features available');
+            createFilmFrame('No features available');
         }
 
         const rollHeight = filmRoll.scrollHeight;
@@ -292,12 +298,18 @@ async function initMainPage() {
         filmRoll.appendChild(frame);
     }
 
-    // Aktualisiert die Cursor-Position für den Taschenlampen-Effekt in den Filmfeldern.
+    // Wendet den Taschenlampen-Effekt als Inline-Style auf den Text des Filmfelds an.
+    // So wird var() in mask-image vermieden, was den CSS-Validator zufriedenstellt.
     filmRoll.addEventListener('mousemove', event => {
         const frame = event.target.closest('.film-frame');
         if (!frame) return;
-        frame.style.setProperty('--frame-x', `${event.offsetX}px`);
-        frame.style.setProperty('--frame-y', `${event.offsetY}px`);
+        const p = frame.querySelector('p');
+        if (!p) return;
+        const gradient = `radial-gradient(circle 85px at ${event.offsetX}px ${event.offsetY}px, black 0%, black 55%, transparent 100%)`;
+        p.style.maskImage = gradient;
+        p.style.webkitMaskImage = gradient;
+        p.style.maskRepeat = 'no-repeat';
+        p.style.webkitMaskRepeat = 'no-repeat';
     });
 
     searchButton.addEventListener('click', filterFilms);
@@ -377,8 +389,7 @@ function initCameraPage() {
 
     let capturedDataURL = null;
 
-    // Nimmt einen Schnappschuss auf: schneidet auf den sichtbaren Ausschnitt zu,
-    // spiegelt das Bild, wendet CSS-Filter und Pixel-Korn an und zeigt das Ergebnis unterhalb des Live-Feeds an.
+    // Nimmt einen Schnappschuss auf: schneidet auf den sichtbaren Ausschnitt zu, spiegelt das Bild, wendet CSS-Filter und Pixel-Korn an.
     captureButton.addEventListener('click', () => {
         if (!webcamVideo.videoWidth) return;
 
@@ -418,7 +429,7 @@ function initCameraPage() {
         photoResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
 
-    // Löst den Browser-Download des aufgenommenen Fotos als JPEG aus. 
+    // Löst den Browser-Download des aufgenommenen Fotos als JPEG aus.
     downloadButton.addEventListener('click', () => {
         if (!capturedDataURL) return;
         const a = document.createElement('a');
