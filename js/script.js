@@ -1,5 +1,3 @@
-/* jshint esversion: 11 */
-
 // ── Gemeinsame Hilfsfunktionen ──────────────────────────────────────────────
 // Werden von beiden Seiten (index.html + camera.html) genutzt.
 
