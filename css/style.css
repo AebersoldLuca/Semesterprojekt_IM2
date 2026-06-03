@@ -57,7 +57,7 @@ h1 {
     margin-bottom: 40px;
 }
 
-/* ── Custom Dropdowns ── */
+/* ── Dropdowns ── */
 .custom-select {
     position: relative;
     display: inline-flex;
@@ -645,7 +645,7 @@ footer {
         margin-bottom: 24px;
     }
 
-    /* Custom-Select Optionen zentriert öffnen */
+    /* Select-Optionen zentriert öffnen */
     .custom-select__options {
         left: 50%;
         transform: translateX(-50%);
